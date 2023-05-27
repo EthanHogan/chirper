@@ -15,7 +15,33 @@ import Emoticon from "vue-material-design-icons/Emoticon.vue";
 import ArrowLeft from "vue-material-design-icons/ArrowLeft.vue";
 import MenuItem from "@/Components/MenuItem.vue";
 
+let createChirp = ref(false);
+let textarea = ref(null);
+let chirp = ref("");
+let file = ref("");
+let showUpload = ref("");
+let uploadType = ref("");
+let randImg1 = ref(`https://picsum.photos/id/${(Math.random() * 200).toFixed(0)}/100`);
 let randImg2 = ref(`https://picsum.photos/id/${(Math.random() * 200).toFixed(0)}/100`);
+
+const getFile = (e) => {
+    file.value = e.target.files[0];
+    showUpload.value = URL.createObjectURL(e.target.files[0]);
+    uploadType.value = file.value.type.split(".").pop();
+};
+
+const closeMessageBox = () => {
+    createChirp.value = false;
+    chirp.value = "";
+    showUpload.value = "";
+    uploadType.value = "";
+    file.value = "";
+};
+
+const textareaInput = (e) => {
+    textarea.value.style.height = "auto";
+    textarea.value.style.height = `${textarea.value.scrollHeight}px`;
+};
 </script>
 
 <template>
@@ -32,6 +58,7 @@ let randImg2 = ref(`https://picsum.photos/id/${(Math.random() * 200).toFixed(0)}
                 <MenuItem iconString="Profile" />
 
                 <button
+                    @click="createChirp = true"
                     class="lg:w-full mt-8 ml-2 text-white font-extrabold text-[22px] bg-[#1C9CEF] p-3 px-3 rounded-full cursor-pointer"
                 >
                     <span class="hidden lg:block">Chirp</span>
@@ -126,6 +153,89 @@ let randImg2 = ref(`https://picsum.photos/id/${(Math.random() * 200).toFixed(0)}
                                 <div class="text-[14px] text-gray-400">12.7k Chirps</div>
                             </div>
                             <DotsHorizontal fillColor="#5e5c5c" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+        id="OverlaySection"
+        v-if="createChirp"
+        class="fixed top-0 left-0 w-full h-screen bg-black md:bg-gray-400 md:bg-opacity-30 md:p-3"
+    >
+        <div class="bg-black md:max-w-2xl md:mx-auto md:mt-10 md:rounded-xl">
+            <div class="flex items-center justify-between p-2 m-2 rounded-full cursor-pointer md:inline-block">
+                <div @click="closeMessageBox()" class="inline-block p-2 rounded-full cursor-pointer hover:bg-gray-800">
+                    <Close fillColor="#FFFFFF" :size="28" class="hidden md:block" />
+                    <ArrowLeft fillColor="#FFFFFF" :size="28" class="block md:hidden" />
+                </div>
+                <button
+                    :disabled="!chirp"
+                    :class="chirp ? 'bg-[#1C9CEF] text-white' : 'bg-[#124077] text-gray-400'"
+                    class="md:hidden font-extrabold text-[16px] p-1.5 px-4 rounded-full cursor-pointer"
+                >
+                    Chirp
+                </button>
+            </div>
+
+            <div class="flex w-full">
+                <div class="ml-3.5 mr-2">
+                    <img class="rounded-full" width="55" :src="randImg1" alt="random image" />
+                </div>
+                <div class="w-[calc(100%-100px)]">
+                    <div class="inline-block">
+                        <div class="flex items-center border border-gray-700 rounded-full">
+                            <span class="text-[#1C9CEF] p-0.5 pl-3.5 font-extrabold">Everyone</span>
+                            <ChevronDown class="pr-2" fillColor="#1C9CEF" :size="25" />
+                        </div>
+                    </div>
+                    <div>
+                        <textarea
+                            :onInput="textareaInput"
+                            cols="30"
+                            rows="4"
+                            placeholder="What's happening?"
+                            v-model="chirp"
+                            ref="textarea"
+                            class="w-full bg-black border-0 mt-2 focus:ring-0 text-white text-[19px] font-extrabold min-h-[120px]"
+                        ></textarea>
+                        <div class="w-full">
+                            <video
+                                controls
+                                v-if="uploadType === 'mp4'"
+                                :src="showUpload"
+                                class="overflow-auto rounded-xl"
+                            />
+                            <img v-else :src="showUpload" class="min-w-full rounded-xl" />
+                        </div>
+                        <div class="flex py-2 items-center text-[#1C9CEF] font-extrabold">
+                            <Earth class="pr-2" fillColor="#1C9CEF" :size="20" /> Everyone can reply
+                        </div>
+                        <div class="border-b border-b-gray-700"></div>
+                        <div class="flex items=center justify-between py-2">
+                            <div class="flex items-center">
+                                <div class="inline-block p-2 rounded-full cursor-pointer hover:bg-gray-800">
+                                    <label for="fileUpload" class="cursor-pointer">
+                                        <ImageOutline fillColor="#1C9CEF" :size="25" />
+                                    </label>
+                                    <input type="file" id="fileUpload" class="hidden" @change="getFile" />
+                                </div>
+                                <div class="inline-block p-2 rounded-full cursor-pointer hover:bg-gray-800">
+                                    <FileGifBox fillColor="#1C9CEF" :size="25" />
+                                </div>
+                                <div class="inline-block p-2 rounded-full cursor-pointer hover:bg-gray-800">
+                                    <Emoticon fillColor="#1C9CEF" :size="25" />
+                                </div>
+                            </div>
+                            <button
+                                :disabled="!chirp"
+                                :class="chirp ? 'bg-[#1C9CEF] text-white' : 'bg-[#124077] text-gray-400'"
+                                class="hidden md:block font-extrabold text-[16px] p-1.5 px-4 rounded-full cursor-pointer"
+                            >
+                                Chirp
+                            </button>
                         </div>
                     </div>
                 </div>
