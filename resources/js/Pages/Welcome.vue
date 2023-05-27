@@ -1,12 +1,32 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
 import ChirperLayout from "@/Layouts/ChirperLayout.vue";
+import Chirp from "@/Components/Chirp.vue";
 </script>
 
 <template>
     <Head title="Welcome" />
     <ChirperLayout>
-        <!-- <div class="bg-red-900">Welcome</div> -->
+        <div class="text-white">
+            <div class="flex">
+                <Chirp
+                    :chirp="{
+                        name: 'John Doe',
+                        handle: 'johndoe',
+                        image: 'https://i.pravatar.cc/50?u=johndoe',
+                        chirp: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.',
+                        file: '/videos/BunnyWakingUp.mp4',
+                        is_video: true,
+                        comments: '35',
+                        rechirps: '54',
+                        likes: '88',
+                        analytics: '1.2K',
+                    }"
+                />
+            </div>
+            <div class="mt-2 border-b border-b-gray-800"></div>
+        </div>
+        >
     </ChirperLayout>
 </template>
 

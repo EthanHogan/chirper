@@ -86,12 +86,12 @@ const textareaInput = (e) => {
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="absolute top-0 z-0 h-full overflow-auto scrollbar-hide">
-                <div class="mt-[126px]"></div>
-                <slot />
-                <div class="pb-4"></div>
+                <div class="absolute top-0 z-0 h-full overflow-auto scrollbar-hide">
+                    <div class="mt-[126px]"></div>
+                    <slot />
+                    <div class="pb-4"></div>
+                </div>
             </div>
 
             <div class="hidden h-screen pl-4 border-l border-gray-800 lg:block lg:w-4/12">
