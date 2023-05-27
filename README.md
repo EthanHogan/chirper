@@ -1,4 +1,4 @@
-#Running the project
+# Running the project
 
 1. Terminal 1
 
