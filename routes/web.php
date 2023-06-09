@@ -16,8 +16,8 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-});
+Route::get('/', [\App\Http\Controllers\ChirpController::class, 'index'])->name('chirps.index');
+Route::post('/chirps', [\App\Http\Controllers\ChirpController::class, 'store'])->name('chirps.store');
+Route::delete('/chirps/{id}', [\App\Http\Controllers\ChirpController::class, 'destroy'])->name('chirps.destroy');
 
 require __DIR__.'/auth.php';

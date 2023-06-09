@@ -2,26 +2,22 @@
 import { Head, Link } from "@inertiajs/vue3";
 import ChirperLayout from "@/Layouts/ChirperLayout.vue";
 import Chirp from "@/Components/Chirp.vue";
+
+defineProps({
+    chirps: {
+        type: Array,
+        required: true,
+    },
+});
 </script>
 
 <template>
     <Head title="Welcome" />
     <ChirperLayout>
         <div class="text-white">
-            <div class="flex">
+            <div class="flex" v-for="chirp in chirps" :key="chirp">
                 <Chirp
-                    :chirp="{
-                        name: 'John Doe',
-                        handle: 'johndoe',
-                        image: 'https://i.pravatar.cc/50?u=johndoe',
-                        chirp: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.',
-                        file: '/videos/BunnyWakingUp.mp4',
-                        is_video: true,
-                        comments: '35',
-                        rechirps: '54',
-                        likes: '88',
-                        analytics: '1.2K',
-                    }"
+                    :chirp="chirp"
                 />
             </div>
             <div class="mt-2 border-b border-b-gray-800"></div>
