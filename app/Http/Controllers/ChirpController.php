@@ -11,22 +11,12 @@ class ChirpController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        print("Hello World");
         return Inertia::render('Welcome', [
             'chirps' => Chirp::orderBy('id', 'desc') ->get()
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -34,38 +24,53 @@ class ChirpController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $file = null;
+        $extension = null;
+        $fileName = null;
+        $path = '';
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Chirp $chirp)
-    {
-        //
-    }
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $request->validate([
+                'file' => 'required|mimes:jpg,jpeg,png,mp4'
+            ]);
+            $extension = $file->getClientOriginalExtension();
+            $fileName = time() . '.' . $extension;
+            $extension == 'mp4' ? $path = '/videos/' : $path = '/pics/';
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Chirp $chirp)
-    {
-        //
-    }
+        $chirp = new Chirp;
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Chirp $chirp)
-    {
-        //
+        $chirp->name = 'Ethan Hogan';
+        $chirp->handle = '@EthanHogan_';
+        $chirp->image = 'https://pbs.twimg.com/profile_images/1091191107092967424/_HR8X964_400x400.jpg';
+        $chirp->chirp = $request->input('chirp');
+        if ($fileName) {
+            $chirp->file = $path . $fileName;
+            $chirp->is_video = $extension == 'mp4' ? true : false;
+            $file->move(public_path() . $path, $fileName);
+        }
+        // make some fake data about the chirp
+        $chirp->comments = rand(5, 500);
+        $chirp->rechirps = rand(5, 500);
+        $chirp->likes = rand(5, 500);
+        $chirp->analytics = rand(5, 500);
+
+        $chirp->save();
     }
 
     /**
      * Remove the specified resource from storage.
+     * @param int $id
      */
-    public function destroy(Chirp $chirp)
+    public function destroy($id)
     {
-        //
+        $chirp = Chirp::find($id);
+
+        if (!is_null($chirp->file) && file_exists(public_path() . $chirp->file)) {
+            unlink(public_path() . $chirp->file);
+        }
+
+        $chirp->delete();
     }
 }

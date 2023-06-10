@@ -42,6 +42,20 @@ const textareaInput = (e) => {
     textarea.value.style.height = "auto";
     textarea.value.style.height = `${textarea.value.scrollHeight}px`;
 };
+
+const addChirp = () => {
+    if (!chirp.value) {
+        return;
+    }
+
+    let data = new FormData();
+    data.append("chirp", chirp.value);
+    data.append("file", file.value);
+
+    router.post('/chirps', data);
+
+    closeMessageBox();
+}
 </script>
 
 <template>
@@ -172,6 +186,7 @@ const textareaInput = (e) => {
                     <ArrowLeft fillColor="#FFFFFF" :size="28" class="block md:hidden" />
                 </div>
                 <button
+                    @click="addChirp()"
                     :disabled="!chirp"
                     :class="chirp ? 'bg-[#1C9CEF] text-white' : 'bg-[#124077] text-gray-400'"
                     class="md:hidden font-extrabold text-[16px] p-1.5 px-4 rounded-full cursor-pointer"
@@ -230,6 +245,7 @@ const textareaInput = (e) => {
                                 </div>
                             </div>
                             <button
+                                @click="addChirp()"
                                 :disabled="!chirp"
                                 :class="chirp ? 'bg-[#1C9CEF] text-white' : 'bg-[#124077] text-gray-400'"
                                 class="hidden md:block font-extrabold text-[16px] p-1.5 px-4 rounded-full cursor-pointer"
