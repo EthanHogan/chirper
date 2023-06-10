@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('image');
             $table->string('handle');
             $table->text('chirp');
-            $table->string('file');
-            $table->boolean('is_video');
+            $table->string('file')->nullable();
+            $table->boolean('is_video')->nullable();
             $table->integer('comments');
             $table->integer('rechirps');
             $table->integer('likes');
